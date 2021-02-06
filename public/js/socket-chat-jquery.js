@@ -7,23 +7,28 @@ var divUsuario = $('#divUsuarios');
 var formEnviar = $('#formEnviar');
 var txtMensaje = $('#txtMensaje');
 var divChatbox = $('#divChatbox');
+var nombreChat = $('#nombreChat');
 
 // Funciones para renderizar usuario
-function renderizarUsuarios(personas) { // peronas que estan en el chat
+function renderizarUsuarios(personas) {
 
     console.log(personas);
     let html = '';
+    let html1 = '';
+    html1 += '<small id="nombreChat" style="color:red">' + params.get('sala') + '</small> ';
 
     html += '<li>';
     html += '    <a href="javascript:void(0)" class="active"> Chat de <span> ' + params.get('sala') + '</span></a>';
     html += '</li>';
 
+
     for (let i = 0; i < personas.length; i++) {
         html += '<li>';
-        html += '   <a data-id=' + personas[i].id + ' href="javascript:void(0)"><img src="assets/images/users/sinfoto.jpg" alt="user-img" class="img-circle"> <span>' + personas[i].nombre + '<small class="text-success">online</small></span></a>'; // los personas conectados en el chat
+        html += '   <a data-id=' + personas[i].id + ' href="javascript:void(0)"><img src="assets/images/users/sinfoto.jpg" alt="user-img" class="img-circle"> <span>' + personas[i].nombre + '<small class="text-success">online</small></span></a>';
         html += '</li>';
     }
     divUsuario.html(html);
+    nombreChat.html(html1);
 }
 
 function renderizarMensajes(mensaje, yo) {
@@ -60,11 +65,10 @@ function renderizarMensajes(mensaje, yo) {
         html += '<div class="chat-time">' + hora + '</div>';
         html += '</li>';
     }
-    divChatbox.append(html); //agrega los mensajes en el chat
-
+    divChatbox.append(html);
 }
 
-function scrollBottom() { //scroll para el chat
+function scrollBottom() {
 
     // selectors
     var newMessage = divChatbox.children('li:last-child');
@@ -84,22 +88,22 @@ function scrollBottom() { //scroll para el chat
 //Listeners escuchas
 divUsuario.on('click', 'a', function() {
 
-    let id = $(this).data('id'); //hace referencia al id que definimor en data-id en la linea 19
+    let id = $(this).data('id');
     if (id) {
         console.log(id);
     }
 });
 formEnviar.on('submit', function(e) {
-    e.preventDefault(); //evita que la persona escriba un mensaje invalido
-    if (txtMensaje.val().trim().length === 0) { //para ver si hay campos vacios y no los envia
+    e.preventDefault();
+    if (txtMensaje.val().trim().length === 0) {
         return;
     }
     socket.emit('crearMensaje', {
         nombre: nombre,
-        mensaje: txtMensaje.val() //el val() es para ver el valor del mensaje, es decir tiene informacion del front
+        mensaje: txtMensaje.val()
     }, function(mensaje) {
         txtMensaje.val('').focus();
-        renderizarMensajes(mensaje, true); //envia los mensajes para que seran mostrados
+        renderizarMensajes(mensaje, true);
         scrollBottom();
     });
 });
