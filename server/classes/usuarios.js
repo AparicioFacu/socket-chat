@@ -27,7 +27,7 @@ class Usuario {
 
         let personaBorrada = this.getPersona(id); //obtengo a la persona
 
-        this.personas = this.personas.filter(persona => persona.id !== id); //regresa a todas las personas menos a la persona con el id que quiero eliminar
+        this.personas = this.personas.filter(persona => persona.id != id); //regresa a todas las personas menos a la persona con el id que quiero eliminar
 
         return personaBorrada;
     }
